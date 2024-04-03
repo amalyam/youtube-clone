@@ -1,0 +1,6 @@
+## node modules
+node_modules
+
+## video files
+*.MP4
+*.mov
