@@ -1,5 +1,5 @@
 # Stage 1: build stage
-FROM node:20 AS builder
+FROM node:20.11.1 AS builder
 
 # Set the working directory in the container to /app
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm install
 
 # Use an official Node runtime as a parent image
-FROM node:20
+FROM node:20.11.1
 
 # Copy app source inside the docker image
 COPY . .
@@ -20,7 +20,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: production stage
-FROM node:20
+FROM node:20.11.1
 
 # Install ffmpeg in the container
 RUN apt-get update && apt-get install -y ffmpeg
