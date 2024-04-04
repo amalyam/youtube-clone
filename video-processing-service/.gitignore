@@ -4,3 +4,6 @@ node_modules
 ## video files
 *.MP4
 *.mov
+
+# Build files
+dist/
