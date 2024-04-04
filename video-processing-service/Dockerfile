@@ -10,16 +10,13 @@ COPY package*.json ./
 # Install any needed packages specified in package.json
 RUN npm install
 
-# Use an official Node runtime as a parent image
-FROM node:20.11.1
-
 # Copy app source inside the docker image
 COPY . .
 
 # Build the app
 RUN npm run build
 
-# Stage 2: production stage
+# Use an official Node runtime as a parent image
 FROM node:20.11.1
 
 # Install ffmpeg in the container
