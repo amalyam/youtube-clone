@@ -108,3 +108,14 @@ function deleteFile(filePath: string): Promise<void> {
     }
   });
 }
+
+/**
+ * Ensures a directory exists, creating it if necessary.
+ * @param {string} dirPath - The directory path to check.
+ */
+function ensureDirectoryExists(dirPath: string) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+    console.log(`Directory created at ${dirPath}`);
+  }
+}
