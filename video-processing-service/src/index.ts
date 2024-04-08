@@ -8,6 +8,8 @@ import {
   uploadProcessedVideo,
 } from "./storage";
 
+// create local directories for videos
+setupDirectories();
 
 const app = express();
 app.use(express.json());
