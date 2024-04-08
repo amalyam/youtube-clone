@@ -85,3 +85,26 @@ export function deleteRawVideo(fileName: string) {
 export function deleteProcessedVideo(fileName: string) {
   return deleteFile(`${localProcessedVideoPath}/${fileName}`);
 }
+
+/**
+ * @param filePath - The path of the file to delete.
+ * @returns a promise that resolves when the file has been deleted
+ */
+function deleteFile(filePath: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (fs.existsSync(filePath)) {
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log(`Failed to delete file at ${filePath}`, err);
+          reject(err);
+        } else {
+          console.log(`File deleted at ${filePath}`);
+          resolve();
+        }
+      });
+    } else {
+      console.log(`File not found at ${filePath}, skipping the delete.`);
+      reject(`File ${filePath} does not exist.`);
+    }
+  });
+}
