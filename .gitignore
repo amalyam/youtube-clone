@@ -1,6 +1,9 @@
 ## node modules
 node_modules
 
+## google cloud sdk
+google-cloud-sdk/
+
 ## video files
 *.MP4
 *.mov
