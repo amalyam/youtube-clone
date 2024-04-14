@@ -13,6 +13,7 @@ setupDirectories();
 
 const app = express();
 app.use(express.json());
+require("dotenv").config();
 
 // process a video file from Cloud Storage into 360p
 app.post("/process-video", async (req, res) => {
