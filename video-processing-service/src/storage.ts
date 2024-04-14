@@ -25,7 +25,7 @@ export function setupDirectories() {
  */
 export function convertVideo(rawVideoName: string, processedVideoName: string) {
   return new Promise<void>((resolve, reject) => {
-    ffmpeg(`{localRawVideoPath}/${rawVideoName}`)
+    ffmpeg(`${localRawVideoPath}/${rawVideoName}`)
       .outputOptions("-vf", "scale=-1:360")
       .on("end", () => {
         console.log("Video processing successfully completed.");
