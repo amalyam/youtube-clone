@@ -11,6 +11,20 @@ const storage = new Storage();
 
 const rawVideoBucketName = "video-viewer-raw-files";
 
+const videoCollectionId = "videos";
+
+// represents a video document in firestore collection
+// this interface also used in video-processing-service/src/firestore.ts
+export interface Video {
+  id?: string; // make required?
+  uid?: string; // make required?
+  filename?: string;
+  status?: "processing" | "processed";
+  title?: string;
+  description?: string;
+  // add date?
+}
+
 export const createUser = functions.auth.user().onCreate((user) => {
   const userInfo = {
     uid: user.uid,
@@ -40,6 +54,7 @@ export const generateUploadUrl = onCall(
 
     // generate a unique filename
     const fileName = `${auth.uid}-${Date.now()}.${data.fileExtension}`;
+    console.log(`Generated file name: ${fileName}`);
 
     // get v4 signed URL for uploading file
     const [url] = await bucket.file(fileName).getSignedUrl({
@@ -51,3 +66,12 @@ export const generateUploadUrl = onCall(
     return { url, fileName };
   }
 );
+
+// limited hard-coded approach, could be improved to better reflect user's peferences (ex: number of videos per page)
+export const getVideos = onCall({ maxInstances: 1 }, async () => {
+  const snapshot = await firestore
+    .collection(videoCollectionId)
+    .limit(10)
+    .get();
+  snapshot.docs.map((doc) => doc.data());
+});
