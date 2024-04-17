@@ -4,6 +4,25 @@ import { Fragment } from "react";
 import { uploadVideo } from "../firebase/functions";
 
 export default function Upload() {
+  const handleUpload = async (file: File) => {
+    try {
+      const response = await uploadVideo(file);
+      alert(
+        `File uploaded successfully. Response: ${JSON.stringify(response)}`
+      );
+    } catch (error) {
+      alert(`Failed to upload file: ${error}`);
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.item(0);
+    if (file) {
+      // wrapper for error handling
+      handleUpload(file);
+    }
+  };
+
   return (
     <Fragment>
       <input id="upload" type="file" accept="video/*" />
