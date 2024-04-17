@@ -10,16 +10,16 @@ const firestore = new Firestore();
 
 const videoCollectionId = "videos";
 
-// make ID and uid required?
-// add date?
 // represents a video document in firestore collection
+// this interface also used in yt-api-service/functions/src/index.ts
 export interface Video {
-  id?: string;
-  uid?: string;
+  id?: string; // make required?
+  uid?: string; // make required?
   filename?: string;
   status?: "processing" | "processed";
   title?: string;
   description?: string;
+  // add date?
 }
 
 // retrieve and return video doc from firestore as Video object
