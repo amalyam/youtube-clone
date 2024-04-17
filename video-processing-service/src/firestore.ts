@@ -42,3 +42,8 @@ export function setVideo(videoId: string, video: Video) {
   );
 }
 
+// retrieves corresponding video doc - if status field undefined, video is new
+export async function isVideoNew(videoId: string) {
+  const video = await getVideo(videoId);
+  return video?.status === undefined;
+}
