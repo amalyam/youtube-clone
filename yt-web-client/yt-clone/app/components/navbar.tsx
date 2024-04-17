@@ -7,6 +7,7 @@ import SignIn from "./sign-in";
 import { onAuthStateChangedHelper } from "../firebase/firebase";
 import { User } from "firebase/auth";
 import { unsubscribe } from "diagnostics_channel";
+import Upload from "./upload";
 
 export default function Navbar() {
   // initialize user state
@@ -35,8 +36,9 @@ export default function Navbar() {
             />
           </span>
         </Link>
+        {user && <Upload />}
+        <SignIn user={user} />
       </div>
-      <SignIn user={user} />
     </nav>
   );
 }
