@@ -7,6 +7,7 @@ import {
   setupDirectories,
   uploadProcessedVideo,
 } from "./storage";
+import { isVideoNew, setVideo } from "./firestore";
 
 // create local directories for videos
 setupDirectories();
@@ -34,8 +35,22 @@ app.post("/process-video", async (req, res) => {
     return res.status(400).send("Bad Request: missing filename.");
   }
 
-  const inputFileName = data.name;
+  const inputFileName = data.name; // format of <UID>-<DATE>.<EXTENSION>
   const outputFileName = `processed-${inputFileName}`;
+  const videoId = inputFileName.split(".")[0];
+
+  // prevent same video from being processed multiple times
+  if (!isVideoNew(videoId)) {
+    return res
+      .status(400)
+      .send("Bad Request: video already processing or processed.");
+  } else {
+    await setVideo(videoId, {
+      id: videoId,
+      uid: videoId.split("-")[0],
+      status: "processing",
+    });
+  }
 
   await downloadRawVideo(inputFileName);
 
@@ -54,6 +69,11 @@ app.post("/process-video", async (req, res) => {
       .send("Internal Server Error: video processing failed.");
   }
   await uploadProcessedVideo(outputFileName);
+
+  await setVideo(videoId, {
+    status: "processed",
+    filename: outputFileName,
+  });
 
   await Promise.all([
     deleteRawVideo(inputFileName),
