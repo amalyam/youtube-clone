@@ -22,3 +22,12 @@ export interface Video {
   description?: string;
 }
 
+// retrieve and return video doc from firestore as Video object
+async function getVideo(videoId: string) {
+  const snapshot = await firestore
+    .collection(videoCollectionId)
+    .doc(videoId)
+    .get();
+  return (snapshot.data() as Video) ?? {};
+}
+
