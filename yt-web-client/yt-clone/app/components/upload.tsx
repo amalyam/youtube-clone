@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { uploadVideo } from "../firebase/functions";
 
 export default function Upload() {
@@ -26,6 +26,12 @@ export default function Upload() {
   return (
     <Fragment>
       <input
+        id="upload"
+        type="file"
+        accept="video/*"
+        onChange={handleFileChange}
+        className="sr-only"
+      />
       <label
         htmlFor="upload"
         className="inline-block border border-gray-400 text-blue-600 px-5 py-2 rounded-full font-roboto text-sm font-medium cursor-pointer hover:bg-blue-200 hover:border-transparent"
