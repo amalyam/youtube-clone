@@ -15,6 +15,8 @@ const app = express();
 app.use(express.json());
 require("dotenv").config();
 
+// TODO refactor into multiple functions
+// TODO think about edge cases - are all paths being handled correctly? (what would happen in message queue?)
 // process a video file from Cloud Storage into 360p
 app.post("/process-video", async (req, res) => {
   // Get the bucket and filename from the Cloud Pub/Sub message
