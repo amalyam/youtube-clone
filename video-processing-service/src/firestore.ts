@@ -31,3 +31,14 @@ async function getVideo(videoId: string) {
   return (snapshot.data() as Video) ?? {};
 }
 
+// sets data of corresponding video doc in firestore collection to Video obj or creates new doc
+export function setVideo(videoId: string, video: Video) {
+  return (
+    firestore
+      .collection(videoCollectionId)
+      .doc(videoId)
+      // if doc already exists, merge new data with existing
+      .set(video, { merge: true })
+  );
+}
+
