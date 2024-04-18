@@ -15,6 +15,8 @@ const videoCollectionId = "videos";
 
 // represents a video document in firestore collection
 // this interface also used in video-processing-service/src/firestore.ts
+// and yt-web-client/yt-clone/app/firebase/functions.ts
+// TODO refactor by creating video-api-service, implement REST API endpoints, make requests to the service (using axios?)
 export interface Video {
   id?: string; // make required?
   uid?: string; // make required?
