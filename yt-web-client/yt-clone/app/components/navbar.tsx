@@ -30,7 +30,7 @@ export default function Navbar() {
           <span className="cursor-pointer">
             <Image
               src="/video-icon.png"
-              alt="video icon"
+              alt="website logo of play video icon"
               width={50}
               height={60}
             />
