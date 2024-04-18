@@ -24,3 +24,7 @@ export default async function Home() {
     </main>
   );
 }
+
+// use segment-level caching to reduce load on getVideos by reducing caching frequency
+// https://nextjs.org/docs/app/building-your-application/data-fetching/caching#segment-level-caching
+export const revalidate = 30;
