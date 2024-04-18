@@ -136,7 +136,12 @@ function deleteFile(filePath: string): Promise<void> {
  */
 function ensureDirectoryExists(dirPath: string) {
   if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
-    console.log(`Directory created at ${dirPath}`);
+    try {
+      fs.mkdirSync(dirPath, { recursive: true });
+      console.log(`Directory created at ${dirPath}`);
+    } catch (err) {
+      console.error(`Failed to create directory at ${dirPath}`, err);
+      throw err;
+    }
   }
 }
