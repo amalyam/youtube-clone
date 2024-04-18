@@ -40,7 +40,12 @@ app.post("/process-video", async (req, res) => {
   const videoId = inputFileName.split(".")[0];
 
   // prevent same video from being processed multiple times
-  if (!isVideoNew(videoId)) {
+  const isNew = await isVideoNew(videoId);
+  if (isNew === null) {
+    return res
+      .status(500)
+      .send("Internal Server Error: unable to check if video is new.");
+  } else if (!isNew) {
     return res
       .status(400)
       .send("Bad Request: video already processing or processed.");
