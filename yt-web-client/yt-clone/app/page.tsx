@@ -1,11 +1,25 @@
-export default function Home() {
+import Link from "next/link";
+import { getVideos } from "./firebase/functions";
+import Image from "next/image";
+
+export default async function Home() {
+  const videos = await getVideos();
+  console.log(videos);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Welcome to Video Viewer!
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
+        {videos.map((video) => (
+          <Link href={`/watch?v=${video.filename}`} key={video.id}>
+            <Image
+              src={"/thumbnail.png"}
+              alt="video"
+              width={120}
+              height={80}
+              className="m-2.5"
+            />
+          </Link>
+        ))}
       </div>
     </main>
   );
