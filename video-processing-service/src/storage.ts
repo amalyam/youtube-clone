@@ -108,20 +108,20 @@ export function deleteProcessedVideo(fileName: string) {
  */
 function deleteFile(filePath: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (fs.existsSync(filePath)) {
-      fs.unlink(filePath, (err) => {
-        if (err) {
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        if (err.code === "ENOENT") {
+          console.log(`File not found at ${filePath}, skipping the delete.`);
+          reject(`File ${filePath} does not exist.`);
+        } else {
           console.log(`Failed to delete file at ${filePath}`, err);
           reject(err);
-        } else {
-          console.log(`File deleted at ${filePath}`);
-          resolve();
         }
-      });
-    } else {
-      console.log(`File not found at ${filePath}, skipping the delete.`);
-      reject(`File ${filePath} does not exist.`);
-    }
+      } else {
+        console.log(`File deleted at ${filePath}`);
+        resolve();
+      }
+    });
   });
 }
 
