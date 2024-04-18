@@ -45,14 +45,18 @@ export function convertVideo(rawVideoName: string, processedVideoName: string) {
  * @returns a promise that resolves when the file has been downloaded.
  */
 export async function downloadRawVideo(fileName: string) {
-  await storage
-    .bucket(rawVideoBucketName)
-    .file(fileName)
-    .download({ destination: `${localRawVideoPath}/${fileName}` });
+  try {
+    await storage
+      .bucket(rawVideoBucketName)
+      .file(fileName)
+      .download({ destination: `${localRawVideoPath}/${fileName}` });
 
-  console.log(
-    `gs://${rawVideoBucketName}/${fileName} downloaded to ${localRawVideoPath}/${fileName}.`
-  );
+    console.log(
+      `gs://${rawVideoBucketName}/${fileName} downloaded to ${localRawVideoPath}/${fileName}.`
+    );
+  } catch (error) {
+    console.error("Failed to download raw video: ", error);
+  }
 }
 
 /**
@@ -61,19 +65,23 @@ export async function downloadRawVideo(fileName: string) {
  * @returns a promise that resolves when the file has been uploaded
  */
 export async function uploadProcessedVideo(fileName: string) {
-  const bucket = storage.bucket(processedVideoBucketName);
+  try {
+    const bucket = storage.bucket(processedVideoBucketName);
 
-  // Upload the video the bucket
-  await bucket.upload(`${localProcessedVideoPath}/${fileName}`, {
-    destination: fileName,
-  });
+    // Upload the video the bucket
+    await bucket.upload(`${localProcessedVideoPath}/${fileName}`, {
+      destination: fileName,
+    });
 
-  console.log(
-    `${localProcessedVideoPath}/${fileName} uploaded to gs://${processedVideoBucketName}/${fileName}.`
-  );
+    console.log(
+      `${localProcessedVideoPath}/${fileName} uploaded to gs://${processedVideoBucketName}/${fileName}.`
+    );
 
-  // Set video to be publicly readable
-  await bucket.file(fileName).makePublic();
+    // Set video to be publicly readable
+    await bucket.file(fileName).makePublic();
+  } catch (error) {
+    console.error("Failed to upload processed video: ", error);
+  }
 }
 
 /**
