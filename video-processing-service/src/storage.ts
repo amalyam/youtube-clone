@@ -1,6 +1,7 @@
 import { Storage } from "@google-cloud/storage";
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
+import path from "path";
 
 const storage = new Storage();
 
@@ -46,13 +47,14 @@ export function convertVideo(rawVideoName: string, processedVideoName: string) {
  */
 export async function downloadRawVideo(fileName: string) {
   try {
+    const destinationPath = path.join(localRawVideoPath, fileName);
     await storage
       .bucket(rawVideoBucketName)
       .file(fileName)
-      .download({ destination: `${localRawVideoPath}/${fileName}` });
+      .download({ destination: destinationPath });
 
     console.log(
-      `gs://${rawVideoBucketName}/${fileName} downloaded to ${localRawVideoPath}/${fileName}.`
+      `gs://${rawVideoBucketName}/${fileName} downloaded to ${destinationPath}.`
     );
   } catch (error) {
     console.error("Failed to download raw video: ", error);
@@ -68,14 +70,15 @@ export async function downloadRawVideo(fileName: string) {
 export async function uploadProcessedVideo(fileName: string) {
   try {
     const bucket = storage.bucket(processedVideoBucketName);
+    const sourcePath = path.join(localProcessedVideoPath, fileName);
 
     // Upload the video the bucket
-    await bucket.upload(`${localProcessedVideoPath}/${fileName}`, {
+    await bucket.upload(sourcePath, {
       destination: fileName,
     });
 
     console.log(
-      `${localProcessedVideoPath}/${fileName} uploaded to gs://${processedVideoBucketName}/${fileName}.`
+      `${sourcePath} uploaded to gs://${processedVideoBucketName}/${fileName}.`
     );
 
     // Set video to be publicly readable
