@@ -16,7 +16,7 @@ interface ButtonProps {
 const Button = ({ children, onClick }: ButtonProps) => (
   <button
     onClick={onClick}
-    className="inline-block border border-gray-400 text-blue-600 px-5 py-2 rounded-full font-roboto text-sm font-medium cursor-pointer hover:bg-blue-200 hover:border-transparent"
+    className="inline-block border border-gray-600 text-blue-800 px-5 py-2 rounded-full font-roboto text-sm font-medium cursor-pointer hover:bg-blue-200 hover:border-transparent"
   >
     {children}
   </button>
