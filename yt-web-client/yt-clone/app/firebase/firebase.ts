@@ -6,6 +6,7 @@ import {
   onAuthStateChanged,
   User,
 } from "firebase/auth";
+import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -19,6 +20,8 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase auth
 const auth = getAuth(app);
+
+export const functions = getFunctions();
 
 /**
  * Uses a Google popup for user to sign in.
