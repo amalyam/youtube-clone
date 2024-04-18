@@ -18,19 +18,36 @@ export interface Video {
   // add date?
 }
 
+// TODO figure out why name is not appearing on uploaded file in bucket
 export async function uploadVideo(file: File) {
-  const response: any = await generateUploadUrl({
-    fileExtension: file.name.split(".").pop(),
-  });
+  try {
+    const response: any = await generateUploadUrl({
+      fileExtension: file.name.split(".").pop(),
+    });
 
-  // upload the file via the signed URL
-  await fetch(response?.data?.url, {
-    method: "PUT",
-    body: file,
-    headers: {
-      "Content-Type": file.type,
-    },
-  });
+    if (!response?.data?.url) {
+      throw new Error("Failed to generate upload URL");
+    }
 
-  return;
+    // upload the file via the signed URL
+    await fetch(response?.data?.url, {
+      method: "PUT",
+      body: file,
+      headers: {
+        "Content-Type": file.type,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to upload video: ", error);
+  }
+}
+
+export async function getVideos() {
+  try {
+    const response = await getVideosFunction();
+    return response.data as Video[];
+  } catch (error) {
+    console.error("Failed to get videos: ", error);
+    return [];
+  }
 }
