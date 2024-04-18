@@ -34,8 +34,17 @@ export const createUser = functions.auth.user().onCreate((user) => {
     photoUrl: user.photoURL,
   };
 
-  firestore.collection("users").doc(user.uid).set(userInfo);
-  logger.info(`User Created ${JSON.stringify(userInfo)}`);
+  try {
+    firestore.collection("users").doc(user.uid).set(userInfo);
+    logger.info(`User Created ${JSON.stringify(userInfo)}`);
+  } catch (error) {
+    logger.error(`Error creating user: ${error}`);
+    throw new functions.https.HttpsError(
+      "unknown",
+      "Failed to createuser",
+      error
+    );
+  }
   return;
 });
 
@@ -52,20 +61,30 @@ export const generateUploadUrl = onCall(
 
     const auth = request.auth;
     const data = request.data;
-    const bucket = storage.bucket(rawVideoBucketName);
 
-    // generate a unique filename
-    const fileName = `${auth.uid}-${Date.now()}.${data.fileExtension}`;
-    console.log(`Generated file name: ${fileName}`);
+    try {
+      const bucket = storage.bucket(rawVideoBucketName);
 
-    // get v4 signed URL for uploading file
-    const [url] = await bucket.file(fileName).getSignedUrl({
-      version: "v4",
-      action: "write",
-      expires: Date.now() + 15 * 60 * 1000, // 15 minutes
-    });
+      // generate a unique filename
+      const fileName = `${auth.uid}-${Date.now()}.${data.fileExtension}`;
+      console.log(`Generated file name: ${fileName}`);
 
-    return { url, fileName };
+      // get v4 signed URL for uploading file
+      const [url] = await bucket.file(fileName).getSignedUrl({
+        version: "v4",
+        action: "write",
+        expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+      });
+
+      return { url, fileName };
+    } catch (error) {
+      logger.error(`Error generating upload URL: ${error}`);
+      throw new functions.https.HttpsError(
+        "unknown",
+        "Failed to generate upload URL",
+        error
+      );
+    }
   }
 );
 
