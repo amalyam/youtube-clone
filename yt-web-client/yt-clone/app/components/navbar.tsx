@@ -6,7 +6,6 @@ import Link from "next/link";
 import SignIn from "./sign-in";
 import { onAuthStateChangedHelper } from "../firebase/firebase";
 import { User } from "firebase/auth";
-import { unsubscribe } from "diagnostics_channel";
 import Upload from "./upload";
 
 export default function Navbar() {
