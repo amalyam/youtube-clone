@@ -56,6 +56,7 @@ export async function downloadRawVideo(fileName: string) {
     );
   } catch (error) {
     console.error("Failed to download raw video: ", error);
+    throw error;
   }
 }
 
@@ -81,6 +82,7 @@ export async function uploadProcessedVideo(fileName: string) {
     await bucket.file(fileName).makePublic();
   } catch (error) {
     console.error("Failed to upload processed video: ", error);
+    throw error;
   }
 }
 
