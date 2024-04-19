@@ -27,17 +27,21 @@ export async function uploadVideo(file: File) {
     });
 
     if (!response?.data?.url) {
-      throw new Error("Failed to generate upload URL");
+      throw new Error("Failed to generate upload URL.");
     }
 
     // upload the file via the signed URL
-    await fetch(response?.data?.url, {
+    const uploadResponse = await fetch(response?.data?.url, {
       method: "PUT",
       body: file,
       headers: {
         "Content-Type": file.type,
       },
     });
+
+    if (!uploadResponse.ok) {
+      throw new Error(`Failed to upload video: ${uploadResponse.statusText}`);
+    }
   } catch (error) {
     console.error("Failed to upload video: ", error);
   }
