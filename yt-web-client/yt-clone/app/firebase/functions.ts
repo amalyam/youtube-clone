@@ -22,6 +22,7 @@ export interface Video {
 export async function uploadVideo(file: File) {
   try {
     const response: any = await generateUploadUrl({
+      fileName: file.name,
       fileExtension: file.name.split(".").pop(),
     });
 
