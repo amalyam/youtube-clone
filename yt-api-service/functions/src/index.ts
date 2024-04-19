@@ -78,6 +78,8 @@ export const generateUploadUrl = onCall(
         expires: Date.now() + 15 * 60 * 1000, // 15 minutes
       });
 
+      console.log(`Generated signed URL: ${url}`);
+
       return { url, fileName };
     } catch (error) {
       logger.error(`Error generating upload URL: ${error}`);
