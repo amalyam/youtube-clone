@@ -1,17 +1,20 @@
 "use client";
 
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { uploadVideo } from "../firebase/functions";
 
 export default function Upload() {
+  const [uploading, setUploading] = useState(false);
+
   const handleUpload = async (file: File) => {
+    setUploading(true);
     try {
       const response = await uploadVideo(file);
       alert("File uploaded successfully!");
-      console.log("File uploaded successfully!");
     } catch (error) {
       alert(`Failed to upload file: ${error}`);
-      console.log(`Failed to upload file: ${error}`);
+    } finally {
+      setUploading(false);
     }
   };
 
