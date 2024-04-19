@@ -1,4 +1,5 @@
 - update gcs-cors.json origin to website domain and any other possible origins once deployed
+- use Cloud Video Intelligence API to prevent upload of explicit content (https://cloud.google.com/video-intelligence/docs/analyze-safesearch)
 - refactor Video interface by creating video-api-service, implement REST API endpoints, make requests to the service (using axios?)
 - Video interface is currently used in:
     - video-processing-service/src/firestore.ts
@@ -6,3 +7,6 @@
     - yt-api-service/functions/src/index.ts
 - add custom thumbnails
 - add info like date uploaded, title, etc. to each video
+- refactor video-processing-service/src/index.ts POST /process-video into multiple functions
+- add pagination (getVideos() yt-api-service/functions/src/index.ts)
+- add additional error handling in upload.tsx (max file size, valid file types, etc)
