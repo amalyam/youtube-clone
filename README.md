@@ -26,15 +26,15 @@ This app is a video viewer modeled on YouTube that allows users to upload videos
 
 ## Notes on development process
 
-- created a project structure that provides a separation of concerns between backend and frontend
-- dockerized the video processing service for easier deployment and scalability
-- deployed the video processing service to Google Cloud Run, allowing for automatic scaling and efficient handling of incoming video processing requests
-- created Google Cloud Storage buckets for raw and processed video files
-- leveraged Google Cloud Pub/Sub to create event-driven messaging system between the Cloud Storage bucket and Cloud Run service
-- created and deployed serverless functions to Google Cloud Functions to handle video retrieval and upload URL generation
-- implemented robust error handling to manage potential issues such as missing video files, failed network requests, or issues generating a signed URL in Google Cloud Functions
-- used React, Next.js, and Tailwind CSS to build a dynamic, server-side rendered frontend app, enhancing user experience with fast page loads and interactive UI components
-- used FFmpeg in the video processing service to convert and scale raw video files. This ensured the videos were in a web-friendly format, reducing bandwidth usage and improving streaming performance for end-users
+- Created a project structure that provides a separation of concerns between backend and frontend
+- Dockerized the video processing service for easier deployment and scalability
+- Deployed the video processing service to Google Cloud Run, allowing for automatic scaling and efficient handling of incoming video processing requests
+- Created Google Cloud Storage buckets for raw and processed video files
+- Leveraged Google Cloud Pub/Sub to create an event-driven messaging system between the Cloud Storage bucket and Cloud Run service
+- Created and deployed serverless functions to Google Cloud Functions to handle video retrieval and upload URL generation
+- Implemented robust error handling to manage potential issues such as missing video files, failed network requests, or issues generating a signed URL in Google Cloud Functions
+- Used React, Next.js, and Tailwind CSS to build a dynamic, server-side rendered frontend app, enhancing user experience with fast page loads and interactive UI components
+- Used FFmpeg in the video processing service to convert and scale raw video files. This ensured the videos were in a web-friendly format, reducing bandwidth usage and improving streaming performance for end-users
 
 ## Future enhancements and fixes:
 
