@@ -73,6 +73,14 @@ app.post("/process-video", async (req, res) => {
       deleteProcessedVideo(outputFileName),
     ]);
     console.error(err);
+
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+
+    await setVideo(videoId, {
+      status: "error",
+      error: errorMessage,
+    });
+
     return res
       .status(500)
       .send("Internal Server Error: video processing failed.");
