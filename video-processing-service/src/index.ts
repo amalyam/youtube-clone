@@ -20,12 +20,19 @@ require("dotenv").config();
 // TODO think about edge cases - are all paths being handled correctly? (what would happen in message queue?)
 // process a video file from Cloud Storage into 360p
 app.post("/process-video", async (req, res) => {
+  if (!req.body || !req.body.message) {
+    return res.status(400).send("Bad Request: Invalid request body.");
+  }
   console.log(req.body); // added for error logging
 
   // Get the bucket and filename from the Cloud Pub/Sub message
   let data;
   let message; // define message here for error logging below
   try {
+    if (typeof req.body.message.data !== "string") {
+      throw new Error("Invalid data type for message.data");
+    }
+
     message = Buffer.from(req.body.message.data, "base64").toString("utf8");
     data = JSON.parse(message);
     console.log(data); // added for error logging

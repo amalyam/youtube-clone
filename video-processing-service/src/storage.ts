@@ -84,8 +84,14 @@ export async function downloadRawVideo(fileName: string) {
  */
 export async function uploadProcessedVideo(fileName: string) {
   try {
+    console.log(`Starting upload of ${fileName}...`);
+
     const bucket = storage.bucket(processedVideoBucketName);
     const sourcePath = path.join(localProcessedVideoPath, fileName);
+
+    console.log(
+      `Uploading ${sourcePath} to bucket ${processedVideoBucketName}...`
+    );
 
     // Upload the video the bucket
     await bucket.upload(sourcePath, {
@@ -96,8 +102,12 @@ export async function uploadProcessedVideo(fileName: string) {
       `${sourcePath} uploaded to gs://${processedVideoBucketName}/${fileName}.`
     );
 
+    console.log(`Making ${fileName} publicly readable...`);
+
     // Set video to be publicly readable
     await bucket.file(fileName).makePublic();
+
+    console.log(`${fileName} is now publicly readable.`);
   } catch (error) {
     console.error("Failed to upload processed video: ", error);
     throw error;
