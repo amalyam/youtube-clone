@@ -16,7 +16,9 @@ const videoCollectionId = "videos";
 // represents a video document in firestore collection
 // this interface also used in video-processing-service/src/firestore.ts
 // and yt-web-client/yt-clone/app/firebase/functions.ts
-// TODO refactor by creating video-api-service, implement REST API endpoints, make requests to the service (using axios?)
+// TODO refactor by creating video-api-service,
+// implement REST API endpoints,
+// make requests to the service (using axios?)
 export interface Video {
   id?: string; // make required?
   uid?: string; // make required?
@@ -92,11 +94,13 @@ export const generateUploadUrl = onCall(
   }
 );
 
-// limited hard-coded approach, could be improved to better reflect user's peferences (ex: number of videos per page)
+// limited hard-coded approach, could be improved to better reflect
+// user's peferences (ex: number of videos per page)
 export const getVideos = onCall({ maxInstances: 1 }, async () => {
   const snapshot = await firestore
     .collection(videoCollectionId)
+    .where("status", "==", "processed")
     .limit(10)
     .get();
-  snapshot.docs.map((doc) => doc.data());
+  return snapshot.docs.map((doc) => doc.data());
 });
