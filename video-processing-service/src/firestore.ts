@@ -18,7 +18,7 @@ export interface Video {
   id?: string; // make required?
   uid?: string; // make required?
   filename?: string;
-  status?: "processing" | "processed";
+  status?: "processing" | "processed" | "error";
   title?: string;
   description?: string;
   // add date?
