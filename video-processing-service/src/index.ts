@@ -20,18 +20,22 @@ require("dotenv").config();
 // TODO think about edge cases - are all paths being handled correctly? (what would happen in message queue?)
 // process a video file from Cloud Storage into 360p
 app.post("/process-video", async (req, res) => {
+  console.log(req.body); // added for error logging
+
   // Get the bucket and filename from the Cloud Pub/Sub message
   let data;
+  let message; // define message here for error logging below
   try {
-    const message = Buffer.from(req.body.message.data, "base64").toString(
-      "utf8"
-    );
+    message = Buffer.from(req.body.message.data, "base64").toString("utf8");
     data = JSON.parse(message);
+    console.log(data); // added for error logging
+
     if (!data.name) {
       throw new Error("Invalid message payload received.");
     }
   } catch (error) {
     console.error(error);
+    console.log(message); // added for error logging
     return res.status(400).send("Bad Request: missing filename.");
   }
 
