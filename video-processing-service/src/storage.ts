@@ -25,7 +25,8 @@ export function setupDirectories() {
  * @returns a promise that resolves whe the video has been converted.
  */
 export function convertVideo(rawVideoName: string, processedVideoName: string) {
-  return new Promise<void>((resolve, reject) => {
+  const TIMEOUT = 300000; // 5 minutes
+  const processing = new Promise<void>((resolve, reject) => {
     ffmpeg(`${localRawVideoPath}/${rawVideoName}`)
       .outputOptions("-vf", "scale=-1:360")
       .on("end", () => {
@@ -38,6 +39,12 @@ export function convertVideo(rawVideoName: string, processedVideoName: string) {
       })
       .save(`${localProcessedVideoPath}/${processedVideoName}`);
   });
+
+  const timeout = new Promise<void>((_, reject) => {
+    setTimeout(() => reject(new Error("Processing timed out")), TIMEOUT);
+  });
+
+  return Promise.race([processing, timeout]);
 }
 
 /**
@@ -57,8 +64,16 @@ export async function downloadRawVideo(fileName: string) {
       `gs://${rawVideoBucketName}/${fileName} downloaded to ${destinationPath}.`
     );
   } catch (error) {
-    console.error("Failed to download raw video: ", error);
-    throw error;
+    if (
+      error instanceof Error &&
+      error.message &&
+      error.message.startsWith("No such object")
+    ) {
+      console.log(`Video file not found: ${error.message}`);
+    } else {
+      console.error("Failed to download raw video: ", error);
+      throw error;
+    }
   }
 }
 
