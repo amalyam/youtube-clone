@@ -21,6 +21,7 @@ export interface Video {
   status?: "processing" | "processed" | "error";
   title?: string;
   description?: string;
+  error?: string;
   // add date?
 }
 
